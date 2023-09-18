@@ -50,6 +50,7 @@ class API{
             $this->metodosDELETE();
         } else {
             echo Response::responseErrorHTTP();
+            exit;
         }
     }
 
