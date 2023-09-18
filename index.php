@@ -46,7 +46,6 @@ class API{
             $this->metodosGET();
         } elseif($_SERVER['REQUEST_METHOD'] === 'POST'){
             $this->metodosPOST();
-            $this->metodosDELETE();
         } else {
             echo Response::responseErrorHTTP();
             exit;
@@ -86,16 +85,9 @@ class API{
                 $obj = $this->instancia->mapeoDatos($array);
                 echo $this->instancia->insertar($obj);
                 break;
-            default:
-                echo Response::responseErrorAccion();
-        }
-    }
-
-    public function metodosDELETE(){
-        switch($this->accion){
             case 'eliminar':
-                echo $this->instancia->eliminar($this->id);
-                break;
+                    echo $this->instancia->eliminar($this->id);
+                    break;
             default:
                 echo Response::responseErrorAccion();
         }
