@@ -46,7 +46,6 @@ class API{
             $this->metodosGET();
         } elseif($_SERVER['REQUEST_METHOD'] === 'POST'){
             $this->metodosPOST();
-        } elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $this->metodosDELETE();
         } else {
             echo Response::responseErrorHTTP();
