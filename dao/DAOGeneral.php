@@ -91,9 +91,18 @@ abstract class DAOGeneral extends Connection implements IDataBase{
 
         $query = $this->connect()->prepare("INSERT INTO $tabla ($columnasString) VALUES ($valoresString)");
         if($query->execute($this->_valores)){
-            $respuesta = Response::responseRegistrar();
+            $id = $this->validarUltimoID($tabla);
+            $respuesta = Response::responseRegistrar($id);
         }
         return $respuesta;
+    }
+
+    public function validarUltimoID($tabla){
+        $query = "SELECT MAX(id) FROM $tabla";
+        $exec = $this->connect()->prepare($query);
+        $exec->execute();
+        $id = $exec->fetchColumn();
+        return $id;
     }
 
     /**

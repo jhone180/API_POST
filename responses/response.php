@@ -21,11 +21,14 @@ class Response{
         return $json;
     }
 
-    public static function responseRegistrar(){
+    public static function responseRegistrar($id){
         header('Content-Type: application/json');
         $response = [
             'success' => true,
-            'message' => 'Se ha registrado correctamente los datos.'
+            'message' => 'Se ha registrado correctamente los datos.',
+            'data' => [
+                'id' => $id
+            ]
         ];
         $json = json_encode($response);
         return $json;
