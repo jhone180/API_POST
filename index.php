@@ -15,15 +15,6 @@ class API{
     public $instancia;
 
     public function __construct() {
-        
-        /*if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            print_r('esto es un POST => ' . $_GET['url']);
-            exit;
-        } else {
-            print_r('Esto es otra cosa => ' . $_GET['url']);
-            exit;
-        }*/
-        
         $url = isset($_GET['url']) ? $_GET['url'] : null;
         $url = rtrim($url, '/');
         $url = explode('/', $url);
@@ -36,7 +27,7 @@ class API{
 
     public function inicio(){
         $this->iniciarInstanciaDAO();
-        $this->metodos();
+        $this->validacionMetodoHTTP();
     }
     
     public function iniciarInstanciaDAO(){
@@ -44,13 +35,25 @@ class API{
         if(class_exists($className)){
             $this->instancia = new $className;
         } else {
-            print_r('No existe la clase');
+            echo Response::responseErrorGeneral('No existe la instancia solicitada.');
             exit;
         }
         
     }
 
-    public function metodos(){
+    public function validacionMetodoHTTP(){
+        if($_SERVER['REQUEST_METHOD'] === 'GET'){
+            $this->metodosGET();
+        } elseif($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $this->metodosPOST();
+        } elseif($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $this->metodosDELETE();
+        } else {
+            echo Response::responseErrorHTTP();
+        }
+    }
+
+    public function metodosGET(){
         switch($this->accion){
             case 'consultar':
                 echo $this->instancia->consultar($this->id);
@@ -64,9 +67,13 @@ class API{
             case 'consultarAll':
                 echo $this->instancia->consultarAll($this->id);
                 break;
-            case 'eliminar':
-                echo $this->instancia->eliminar($this->id);
-                break;
+            default:
+                echo Response::responseErrorAccion();
+        }
+    }
+
+    public function metodosPOST(){
+        switch($this->accion){
             case 'actualizar':
                 $json = file_get_contents('php://input');
                 $array = json_decode($json, true);
@@ -80,10 +87,19 @@ class API{
                 echo $this->instancia->insertar($obj);
                 break;
             default:
-                echo Response::responseErrorAccion();       
+                echo Response::responseErrorAccion();
         }
     }
 
+    public function metodosDELETE(){
+        switch($this->accion){
+            case 'eliminar':
+                echo $this->instancia->eliminar($this->id);
+                break;
+            default:
+                echo Response::responseErrorAccion();
+        }
+    }
 }
 
 new API();

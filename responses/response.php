@@ -60,6 +60,26 @@ class Response{
         $json = json_encode($response);
         return $json;
     }
+
+    public static function responseErrorHTTP(){
+        header('Content-Type: application/json');
+        $response = [
+            'success' => false,
+            'message' => 'Metodo no corresponde a alguna existente.'
+        ];
+        $json = json_encode($response);
+        return $json;
+    }
+
+    public static function responseErrorGeneral($msg){
+        header('Content-Type: application/json');
+        $response = [
+            'success' => false,
+            'message' => 'Hubo un error: ' . $msg
+        ];
+        $json = json_encode($response);
+        return $json;
+    }
 }
 
 ?>
